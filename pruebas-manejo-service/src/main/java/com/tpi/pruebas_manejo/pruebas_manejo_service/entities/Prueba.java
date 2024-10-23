@@ -3,6 +3,8 @@ package com.tpi.pruebas_manejo.pruebas_manejo_service.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @NoArgsConstructor
