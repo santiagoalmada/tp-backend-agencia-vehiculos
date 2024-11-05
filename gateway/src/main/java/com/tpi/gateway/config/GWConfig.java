@@ -17,7 +17,7 @@ public class GWConfig {
         return builder.routes()
                 // Ruteo basado en la ruta "/api/pruebas/**"
                 .route(r -> r.path("/api/pruebas/**")
-                        .uri("http://localhost:8083")) // Redirige al microservicio de pruebas
+                        .uri("http://localhost:8081")) // Redirige al microservicio de pruebas
 
                 /*
                 // Ruteo basado en la ruta "/api/notificaciones/**"
