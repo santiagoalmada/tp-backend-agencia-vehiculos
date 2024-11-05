@@ -3,6 +3,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -29,5 +30,8 @@ public class Interesado {
 
     @Column(name = "FECHA_VENCIMIENTO_LICENCIA")
     private LocalDate fechaVencimientoLicencia;
+
+    @OneToMany(mappedBy = "interesado")
+    private List<Prueba> pruebas;
 }
 

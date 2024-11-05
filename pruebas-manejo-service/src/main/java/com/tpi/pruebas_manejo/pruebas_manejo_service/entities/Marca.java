@@ -2,6 +2,8 @@ package com.tpi.pruebas_manejo.pruebas_manejo_service.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,4 +16,7 @@ public class Marca {
     private Long id;
 
     private String nombre;
+
+    @OneToMany(mappedBy = "marca")
+    private List<Modelo> modelos;
 }

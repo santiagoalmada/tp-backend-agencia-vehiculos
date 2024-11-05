@@ -2,6 +2,8 @@ package com.tpi.pruebas_manejo.pruebas_manejo_service.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -14,6 +16,14 @@ public class Vehiculo {
     private Long id;
 
     private String patente;
+
+    private int anio;
+
+    @OneToMany(mappedBy = "vehiculo")
+    private List<Posicion> posiciones;
+
+    @OneToMany(mappedBy = "vehiculo")
+    private List<Prueba> pruebas;
 
     @ManyToOne
     @JoinColumn(name = "ID_MODELO")

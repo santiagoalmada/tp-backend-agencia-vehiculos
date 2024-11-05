@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,4 +24,8 @@ public class Empleado {
 
     @Column(name = "TELEFONO_CONTACTO")
     private String telefonoContacto;
+
+    @OneToMany (mappedBy = "empleado")
+    private List<Prueba> pruebas;
+
 }
