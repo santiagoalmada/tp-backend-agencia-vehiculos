@@ -1,5 +1,6 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,12 +29,22 @@ public class Prueba {
     @JoinColumn(name = "ID_EMPLEADO")
     private Empleado empleado;
 
-    @Column(name = "FECHA_HORA_INICIO")
+    // Fecha y hora de la prueba (timestamp en la BD)
+    @Column(name = "fecha_hora_inicio")
     private LocalDateTime fechaHoraInicio;
 
+    // Fecha hora fin de la prueba
     @Column(name = "FECHA_HORA_FIN")
     private LocalDateTime fechaHoraFin;
 
     private String comentarios;
+
+    public boolean estasEnCurso() {
+        return fechaHoraFin == null;
+    }
+
+    public boolean estasFinalizada() {
+        return fechaHoraFin != null;
+    }
 }
 

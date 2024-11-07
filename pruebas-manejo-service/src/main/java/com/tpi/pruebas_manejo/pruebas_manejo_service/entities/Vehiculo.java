@@ -1,4 +1,5 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,13 +20,28 @@ public class Vehiculo {
 
     private int anio;
 
-    @OneToMany(mappedBy = "vehiculo")
-    private List<Posicion> posiciones;
+    //one to one con posicion
+    @JsonIgnore // Ignorar este atributo al serializar a JSON (evitar bucle infinito)
+    @OneToOne(mappedBy = "vehiculo")
+    private Posicion posicion;
 
+    @JsonIgnore // Ignorar este atributo al serializar a JSON (evitar bucle infinito)
     @OneToMany(mappedBy = "vehiculo")
     private List<Prueba> pruebas;
+
 
     @ManyToOne
     @JoinColumn(name = "ID_MODELO")
     private Modelo modelo;
+
+    // Métodos:
+    public boolean estasSiendoProbado() {
+        // Esta siendo probado si alguna de sus pruebas esta en curso (no tiene fechaHoraFin)
+        for (Prueba prueba : pruebas) {
+            if (prueba.estasEnCurso()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

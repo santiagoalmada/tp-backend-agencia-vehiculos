@@ -10,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 // Aquí definimos las rutas que redirigirán las peticiones a los microservicios correspondientes
 // Redirigimos las peticiones que lleguen a /api/pruebas/** al microservicio de pruebas (puerto 8083)
 
+// Ejemplo: http://localhost:8082/api/pruebas/empleados --> http://localhost:8083/empleados
+
 @Configuration
 public class GWConfig {
     @Bean
@@ -17,7 +19,8 @@ public class GWConfig {
         return builder.routes()
                 // Ruteo basado en la ruta "/api/pruebas/**"
                 .route(r -> r.path("/api/pruebas/**")
-                        .uri("http://localhost:8081")) // Redirige al microservicio de pruebas
+                        .filters(f -> f.stripPrefix(2)) //Elimina "/api/pruebas" para que el microservicio reciba el resto de la ruta
+                        .uri("http://localhost:8083")) // Redirige al microservicio de pruebas
 
                 /*
                 // Ruteo basado en la ruta "/api/notificaciones/**"

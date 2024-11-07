@@ -16,4 +16,8 @@ public class EmpleadoService {
     public List<Empleado> getAllEmpleados() {
         return empleadoRepository.findAll();
     }
+
+    public List<Empleado> getEmpleadosQueEmpiecenConApellidoD() {
+        return empleadoRepository.findByApellidoStartingWith("D");
+    }
 }

@@ -1,27 +1,22 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.dtos;
 
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Posicion;
+import lombok.Setter;
 
-@Data
+import java.time.LocalDateTime;
+
+@Getter
+@Setter
 @NoArgsConstructor
 public class PosicionDTO {
-    private Long id;
+    private Long vehiculoId;
     private Double latitud;
     private Double longitud;
 
-    public PosicionDTO(Posicion posicion) {
-        this.id = posicion.getId();
-        this.latitud = posicion.getLatitud();
-        this.longitud = posicion.getLongitud();
-    }
-
-    public Posicion toEntity() {
-        Posicion posicion = new Posicion();
-        posicion.setId(this.id);
-        posicion.setLatitud(this.latitud);
-        posicion.setLongitud(this.longitud);
-        return posicion;
+    public PosicionDTO(Long vehiculoId, LocalDateTime fechaHora, Double latitud, Double longitud) {
+        this.vehiculoId = vehiculoId;
+        this.latitud = latitud;
+        this.longitud = longitud;
     }
 }

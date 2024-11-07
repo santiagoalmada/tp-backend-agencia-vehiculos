@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/empleados")
+@RequestMapping("/empleados")
 public class EmpleadoController {
 
     @Autowired
@@ -19,5 +19,10 @@ public class EmpleadoController {
     @GetMapping
     public List<Empleado> getAllEmpleados() {
         return empleadoService.getAllEmpleados();
+    }
+
+    @GetMapping("/apellidoD")
+    public List<Empleado> getEmpleadosQueEmpiecenConApellidoD() {
+        return empleadoService.getEmpleadosQueEmpiecenConApellidoD();
     }
 }

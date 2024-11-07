@@ -1,4 +1,5 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,6 +18,7 @@ public class Marca {
 
     private String nombre;
 
+    @JsonIgnore // Ignorar este atributo al serializar a JSON (evitar bucle infinito)
     @OneToMany(mappedBy = "marca")
     private List<Modelo> modelos;
 }

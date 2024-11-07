@@ -3,10 +3,17 @@ package com.tpi.pruebas_manejo.pruebas_manejo_service.repositories;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Prueba;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+
 
 // Cada repositorio extiende de JpaRepository,
 // lo cual te proporciona acceso a métodos CRUD predefinidos como save(), findAll(), findById(), etc.
 
+// Para ver más ejemplos de consultas soportadas por JPA: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods.query-creation
+
 public interface PruebaRepository extends JpaRepository<Prueba, Long> {
-    // Puedes agregar métodos de consulta personalizados si los necesitas
+    // Pruebas en curso (fechaHoraFin es null)
+    List<Prueba> findByFechaHoraFinIsNull();
 }
+
+
