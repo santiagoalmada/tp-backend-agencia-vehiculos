@@ -1,7 +1,9 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.services;
 
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.ConfiguracionCoordenadasDTO;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.NotificacionDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.PosicionDTO;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Empleado;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Posicion;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Vehiculo;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PosicionRepository;
@@ -21,6 +23,8 @@ public class PosicionService {
     private PosicionRepository posicionRepository;
     @Autowired
     private ConfiguracionCoordenadasService ConfiguracionCoordenadasService;
+    @Autowired
+    private NotificacionService NotificacionService;
 
 
     // actualizarPosicion
@@ -63,16 +67,44 @@ public class PosicionService {
             return;
         };
 
+        // Obtengo el empleado que esta realizando la prueba
+        Empleado empleado = vehiculo.getEmpleadoEnPrueba();
+        fechaHora = LocalDateTime.now();
+
         // Verificar si la posición está dentro de limites establecidos:
         if (!posicion.estaDentroDelRadio(configuracionDTO.getCoordenadasAgencia(),  configuracionDTO.getRadioAdmitidoKm() )) {
+
+            // Mensaje
+            String mensaje = String.format("El vehículo %d está fuera del radio permitido.", vehiculo.getId());
+
+
+
+            NotificacionDTO notificacion = new NotificacionDTO();
+            // generar un id random
+            notificacion.setId(123);
+            notificacion.setMensaje(mensaje);
+            notificacion.setTipo("ALERTA");
+            notificacion.setTelefono(empleado.getTelefonoContacto());
+
             // Enviar notificación al otro servicio
-            System.out.printf("El vehículo %d está fuera del radio permitido.\n", vehiculo.getId());
+            NotificacionService.enviarNotificacion(notificacion);
+
         };
 
         // Verificar si la posición está fuera de limites establecidos:
         if (posicion.estaDentroDeZonas(configuracionDTO.getZonasRestringidas() )) {
+
+            // Mensaje
+            String mensaje = String.format("El vehículo %d está dentro de una zona peligrosa.", vehiculo.getId());
+
+            NotificacionDTO notificacion = new NotificacionDTO();
+            notificacion.setId(124);
+            notificacion.setMensaje(mensaje);
+            notificacion.setTipo("ALERTA");
+            notificacion.setTelefono(empleado.getTelefonoContacto());
+
             // Enviar notificación al otro servicio
-            System.out.printf("El vehículo %d está dentro de una zona peligrosa\n", vehiculo.getId());
+            NotificacionService.enviarNotificacion(notificacion);
         };
     }
 }
