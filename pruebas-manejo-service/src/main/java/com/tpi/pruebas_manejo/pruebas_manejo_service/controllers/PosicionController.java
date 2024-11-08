@@ -5,10 +5,7 @@ import com.tpi.pruebas_manejo.pruebas_manejo_service.services.PosicionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
@@ -21,7 +18,7 @@ public class PosicionController {
 
     private static final String API_URL = "https://labsys.frc.utn.edu.ar/apps-disponibilizadas/backend/api/v1/configuracion/";
 
-    @PostMapping("/actualizar")
+    @PutMapping("/actualizar")
     public ResponseEntity<String> actualizarPosicion(@RequestBody PosicionDTO request) {
         try {
             PosicionService.actualizarPosicion(request);

@@ -19,25 +19,17 @@ public class PosicionService {
     private VehiculoRepository vehiculoRepository;
     @Autowired
     private PosicionRepository posicionRepository;
-
     @Autowired
-    private RestTemplate restTemplate; // Para consumir la API externa
+    private ConfiguracionCoordenadasService ConfiguracionCoordenadasService;
 
-    // API que nos proporciona los limites de la pista:
-    private static final String API_URL = "https://labsys.frc.utn.edu.ar/apps-disponibilizadas/backend/api/v1/configuracion/";
 
     // actualizarPosicion
     // Actualizar la posición del vehículo con los datos recibidos (DTO).
 
     public void actualizarPosicion( PosicionDTO request ){
 
-        // Consumimos la API para obtener la configuración
-        ConfiguracionCoordenadasDTO configuracionDTO = restTemplate.exchange(API_URL, HttpMethod.GET, null, ConfiguracionCoordenadasDTO.class).getBody();
-
-        // Verificamos si la configuración fue obtenida correctamente
-        if (configuracionDTO == null) {
-            throw new RuntimeException("Error al obtener la configuración de las coordenadas.");
-        }
+        // Obtenemos la configuración de coordenadas:
+        ConfiguracionCoordenadasDTO configuracionDTO = ConfiguracionCoordenadasService.obtenerConfiguracion();
 
         System.out.println("Agencia coordenada: " + configuracionDTO.getCoordenadasAgencia());
 

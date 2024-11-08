@@ -63,7 +63,7 @@ public class PruebaController {
     // - pruebaId: ID de la prueba a finalizar
     // - Comentarios
 
-    @PostMapping("/finalizar")
+    @PutMapping("/finalizar")
     public ResponseEntity<String> finalizarPrueba(@RequestBody FinalizarPruebaRequestDTO request) {
         try {
             pruebaService.finalizarPrueba(request);
