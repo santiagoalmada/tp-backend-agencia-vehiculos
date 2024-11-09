@@ -75,8 +75,15 @@ public class PosicionService {
         if (!posicion.estaDentroDelRadio(configuracionDTO.getCoordenadasAgencia(),  configuracionDTO.getRadioAdmitidoKm() )) {
 
             // Mensaje
-            String mensaje = String.format("El vehículo %d está fuera del radio permitido.", vehiculo.getId());
-
+            String mensaje = String.format(
+                    "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + " de la Empesa. " +
+                            "Posición actual: Latitud %.4f, Longitud %.4f.",
+                    vehiculo.getPatente(),
+                    vehiculo.getAnio(),
+                    vehiculo.getModelo().getMarca().getNombre(),
+                    vehiculo.getPosicion().getLatitud(),
+                    vehiculo.getPosicion().getLongitud()
+            );
 
 
             NotificacionDTO notificacion = new NotificacionDTO();
@@ -95,7 +102,15 @@ public class PosicionService {
         if (posicion.estaDentroDeZonas(configuracionDTO.getZonasRestringidas() )) {
 
             // Mensaje
-            String mensaje = String.format("El vehículo %d está dentro de una zona peligrosa.", vehiculo.getId());
+            String mensaje = String.format(
+                    "El vehículo con patente %s, año %d y marca %s está dentro de una zona peligrosa. " +
+                            "Posición actual: Latitud %.4f, Longitud %.4f.",
+                    vehiculo.getPatente(),
+                    vehiculo.getAnio(),
+                    vehiculo.getModelo().getMarca().getNombre(),
+                    vehiculo.getPosicion().getLatitud(),
+                    vehiculo.getPosicion().getLongitud()
+            );
 
             NotificacionDTO notificacion = new NotificacionDTO();
             notificacion.setId(124);
