@@ -7,9 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="authentication-service" />
         <module name="tp" />
         <module name="pruebas-manejo-service" />
         <module name="gateway" />
+        <module name="tpVehiculos" />
       </profile>
     </annotationProcessing>
   </component>
@@ -18,6 +20,7 @@
       <module name="gateway" options="-parameters" />
       <module name="pruebas-manejo-service" options="-parameters" />
       <module name="tp" options="-parameters" />
+      <module name="tpVehiculos" options="-parameters" />
     </option>
   </component>
 </project>
