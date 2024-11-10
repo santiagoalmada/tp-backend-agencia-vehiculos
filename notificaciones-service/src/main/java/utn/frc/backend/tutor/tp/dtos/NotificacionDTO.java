@@ -14,17 +14,17 @@ import java.time.LocalDateTime;
 
 public class NotificacionDTO {
 
-    private int id; //todo
     private String mensaje;
     private String tipo;
     private String telefono;
     private LocalDateTime fechaEnvio;
+    private String nombreInteresado;
 
-    public NotificacionDTO(String mensaje, String tipo, String telefono, LocalDateTime fechaEnvio) {
-        this.id = id;
+    public NotificacionDTO(String mensaje, String tipo, String telefono, LocalDateTime fechaEnvio, String nombreInteresado) {
         this.mensaje = mensaje;
         this.tipo = tipo;
         this.telefono = telefono;
         this.fechaEnvio = fechaEnvio;
+        this.nombreInteresado = nombreInteresado;
     }
 }

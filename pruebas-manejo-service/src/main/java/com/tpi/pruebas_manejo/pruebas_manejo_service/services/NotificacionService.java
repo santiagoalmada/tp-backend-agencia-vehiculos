@@ -33,6 +33,8 @@ public class NotificacionService {
                     Void.class // Tipo de respuesta esperada
             );
 
+
+
             // Verificar si la respuesta fue exitosa (HTTP 200 OK)
             if (response.getStatusCode() != HttpStatus.OK) {
                 throw new RuntimeException("Error al enviar la notificación. Código de respuesta: " + response.getStatusCode());

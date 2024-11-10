@@ -24,11 +24,11 @@ public class NotificacionService {
         // Crear una nueva notificación con los datos recibidos (DTO)
 
         Notificacion notificacion = new Notificacion();
-        notificacion.setId(notificacionDTO.getId());
         notificacion.setTipo(notificacionDTO.getTipo());
         notificacion.setMensaje(notificacionDTO.getMensaje());
         notificacion.setTelefono(notificacionDTO.getTelefono());
         notificacion.setFechaEnvio(notificacionDTO.getFechaEnvio());
+        notificacion.setNombreInteresado(notificacionDTO.getNombreInteresado());
 
         // Guardar la notificación en la base de datos
         notificacionRepository.save(notificacion);

@@ -76,7 +76,7 @@ public class PosicionService {
 
             // Mensaje
             String mensaje = String.format(
-                    "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + " de la Empesa. " +
+                    "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + "km de la Empesa. " +
                             "Posición actual: Latitud %.4f, Longitud %.4f.",
                     vehiculo.getPatente(),
                     vehiculo.getAnio(),
@@ -87,11 +87,11 @@ public class PosicionService {
 
 
             NotificacionDTO notificacion = new NotificacionDTO();
-            // generar un id random
-            notificacion.setId(123);
             notificacion.setMensaje(mensaje);
             notificacion.setTipo("ALERTA");
             notificacion.setTelefono(empleado.getTelefonoContacto());
+            notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
+            notificacion.setFechaEnvio(fechaHora);
 
             // Enviar notificación al otro servicio
             NotificacionService.enviarNotificacion(notificacion);
@@ -113,10 +113,11 @@ public class PosicionService {
             );
 
             NotificacionDTO notificacion = new NotificacionDTO();
-            notificacion.setId(124);
             notificacion.setMensaje(mensaje);
             notificacion.setTipo("ALERTA");
             notificacion.setTelefono(empleado.getTelefonoContacto());
+            notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
+            notificacion.setFechaEnvio(fechaHora);
 
             // Enviar notificación al otro servicio
             NotificacionService.enviarNotificacion(notificacion);

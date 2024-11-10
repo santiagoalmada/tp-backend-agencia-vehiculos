@@ -14,6 +14,7 @@ public class PosicionDTO {
     private Double latitud;
     private Double longitud;
 
+
     public PosicionDTO(Long vehiculoId, LocalDateTime fechaHora, Double latitud, Double longitud) {
         this.vehiculoId = vehiculoId;
         this.latitud = latitud;
