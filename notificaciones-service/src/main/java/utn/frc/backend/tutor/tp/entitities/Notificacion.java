@@ -16,8 +16,8 @@ import java.time.LocalDateTime;
 @Table(name = "notificaciones")
 public class Notificacion {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    //@GeneratedValue(strategy = GenerationType.IDENTITY) //todo
+    private int id;
 
     @Column(name="mensaje")
     private String mensaje;

@@ -9,22 +9,22 @@ import utn.frc.backend.tutor.tp.services.NotificacionService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/notificaciones")
+@RequestMapping("api/notificaciones")
 public class NotificacionController {
-
     @Autowired
     private NotificacionService notificacionService;
 
+    // GET /notificaciones
     @GetMapping
     public List<Notificacion> getAllNotificaciones() {
         return notificacionService.getAllNotificaciones();
     }
 
+    // POST /notificaciones/nueva
     @PostMapping("/nueva")
     public void nuevaNotificacion(@RequestBody NotificacionDTO notificacion) {
         notificacionService.nuevaNotificacion(notificacion);
     }
-
 }
 
 

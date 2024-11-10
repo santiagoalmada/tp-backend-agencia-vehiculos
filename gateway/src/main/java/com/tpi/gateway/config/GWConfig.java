@@ -19,15 +19,13 @@ public class GWConfig {
         return builder.routes()
                 // Ruteo basado en la ruta "/api/pruebas/**"
                 .route(r -> r.path("/api/pruebas/**")
-                        .filters(f -> f.stripPrefix(2)) //Elimina "/api/pruebas" para que el microservicio reciba el resto de la ruta
                         .uri("http://localhost:8083")) // Redirige al microservicio de pruebas
 
-                /*
+
                 // Ruteo basado en la ruta "/api/notificaciones/**"
                 .route(r -> r.path("/api/notificaciones/**")
                         .uri("http://localhost:8084")) // Redirige al microservicio de notificaciones
 
-                */
                 .build();
     }
 }

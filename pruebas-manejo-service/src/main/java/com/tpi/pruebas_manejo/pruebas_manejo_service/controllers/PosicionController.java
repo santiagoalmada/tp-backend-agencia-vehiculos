@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 @RestController
-@RequestMapping("/posicion")
+@RequestMapping("api/pruebas/posicion")
 public class PosicionController {
     @Autowired
     private PosicionService PosicionService;
