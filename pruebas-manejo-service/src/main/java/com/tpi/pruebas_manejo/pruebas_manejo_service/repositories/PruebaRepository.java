@@ -15,8 +15,13 @@ public interface PruebaRepository extends JpaRepository<Prueba, Long> {
     // Pruebas en curso (fechaHoraFin es null)
     List<Prueba> findByFechaHoraFinIsNull();
 
+    // Pruebas que excedio limite de la agencia o entró en zona prohibida.
     List<Prueba> findByExcedioLimiteIsTrue();
 
+    // Pruebas de un empleado que excedieron el limite
     List<Prueba> findByExcedioLimiteIsTrueAndEmpleado_Legajo(Long legajo);
+
+    // Pruebas de un vehiculo
+    List<Prueba> findByVehiculo_Id(Long vehiculoId);
 }
 

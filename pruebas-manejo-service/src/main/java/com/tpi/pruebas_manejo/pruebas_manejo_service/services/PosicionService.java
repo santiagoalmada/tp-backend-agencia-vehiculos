@@ -66,7 +66,6 @@ public class PosicionService {
             return;
         }
 
-
         // Obtengo el empleado que esta realizando la prueba
         Empleado empleado = pruebaEnCurso.getEmpleado();
         // Obtengo el interesado que esta realizando la prueba
@@ -79,8 +78,6 @@ public class PosicionService {
             String mensajeBase = "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + "km de la Empresa. " +
                     "Posición actual: Latitud %.4f, Longitud %.4f.";
 
-            System.out.println(interesado.getNombre());
-            System.out.println(pruebaEnCurso.getComentarios());
             manejarRestriccionPorPosicion(
                     vehiculo, nuevaPosicion, empleado, interesado,
                     mensajeBase, fechaHora, pruebaEnCurso);
@@ -93,8 +90,6 @@ public class PosicionService {
             // Crear el mensaje base para la notificación
             String mensajeBase = "El vehículo con patente %s, año %d y marca %s está dentro de una zona peligrosa. " +
                     "Posición actual: Latitud %.4f, Longitud %.4f.";
-            System.out.println(interesado.toString());
-            System.out.println(pruebaEnCurso.toString());
 
             manejarRestriccionPorPosicion(
                     vehiculo, nuevaPosicion, empleado, interesado,
@@ -106,13 +101,10 @@ public class PosicionService {
     private void manejarRestriccionPorPosicion(Vehiculo vehiculo, Posicion posicion, Empleado empleado, Interesado interesado,
                                     String mensajeBase, LocalDateTime fechaHora, Prueba pruebaEnCurso) {
 
-
         // Restringir al interesado y marcar prueba como excedida
         interesado.setRestringido(true);
         pruebaEnCurso.setExcedioLimite(true);
-
-
-        // Guardar el interesado restringido en la base de datos
+        // Actualizar en la base de datos
         interesadoRepository.save(interesado);
         pruebaRepository.save(pruebaEnCurso);
 

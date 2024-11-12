@@ -1,6 +1,6 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.controllers;
 
-import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteIncidentesDTO;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReportePruebasDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteKilometrosDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.services.ReportesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,9 +37,21 @@ public class ReportesController {
     }
 
     @GetMapping("/incidentes")
-    public ResponseEntity<?> generarReporteIncidentes(@RequestParam(value = "legajoEmp", required = false) Long legajoEmp) {
+    public ResponseEntity<?> generarReporteIncidentes(
+            @RequestParam(value = "legajoEmp", required = false) Long legajoEmp) {
         try {
-            List<ReporteIncidentesDTO> reporte = reportesService.generarReporteIncidentes(legajoEmp);
+            List<ReportePruebasDTO> reporte = reportesService.generarReporteIncidentes(legajoEmp);
+            return ResponseEntity.ok(reporte);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al generar el reporte: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/pruebas-vehiculo")
+    public ResponseEntity<?> generarReportePruebasPorVehiculo(
+            @RequestParam Long vehiculoId) {
+        try {
+            List<ReportePruebasDTO> reporte = reportesService.generarReportePruebasPorVehiculo(vehiculoId);
             return ResponseEntity.ok(reporte);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al generar el reporte: " + e.getMessage());

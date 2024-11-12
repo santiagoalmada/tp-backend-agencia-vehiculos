@@ -17,9 +17,9 @@ public interface PosicionRepository extends JpaRepository<Posicion, Long> {
             "WHERE p.fecha_hora BETWEEN :fechaInicio AND :fechaFin " +
             "AND p.id_vehiculo = :vehiculoId",
             nativeQuery = true)
+
     List<Posicion> findPosicionesEntreFechasPorVehiculo(
             @Param("fechaInicio") LocalDateTime fechaInicio,
             @Param("fechaFin") LocalDateTime fechaFin,
             @Param("vehiculoId") Long vehiculoId);
-
 }

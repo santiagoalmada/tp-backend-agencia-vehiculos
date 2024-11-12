@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ReporteIncidentesDTO {
+public class ReportePruebasDTO {
     private Long pruebaId;
     private String fechaInicio;
     private String fechaFin;
@@ -19,7 +19,7 @@ public class ReporteIncidentesDTO {
     private String nombreEmpleado;
     private String apellidoEmpleado;
 
-    public ReporteIncidentesDTO(Long pruebaId, String fechaInicio, String fechaFin, String modeloVehiculo, String marcaVehiculo, String patente, String nombreInteresado, String apellidoInteresado, String nombreEmpleado, String apellidoEmpleado) {
+    public ReportePruebasDTO(Long pruebaId, String fechaInicio, String fechaFin, String modeloVehiculo, String marcaVehiculo, String patente, String nombreInteresado, String apellidoInteresado, String nombreEmpleado, String apellidoEmpleado) {
         this.pruebaId = pruebaId;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;

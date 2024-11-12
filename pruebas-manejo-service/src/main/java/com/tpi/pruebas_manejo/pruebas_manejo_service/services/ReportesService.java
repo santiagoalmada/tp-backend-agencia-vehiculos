@@ -1,10 +1,12 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.services;
 
-import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteIncidentesDTO;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReportePruebasDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteKilometrosDTO;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Empleado;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Posicion;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Prueba;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Vehiculo;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.EmpleadoRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PosicionRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PruebaRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.VehiculoRepository;
@@ -23,12 +25,14 @@ public class ReportesService {
     private VehiculoRepository vehiculoRepository;
     @Autowired
     private PruebaRepository pruebaRepository;
+    @Autowired
+    private EmpleadoRepository empleadoRepository;
 
     public ReporteKilometrosDTO generarReporteKilometrosRecorridos(Long vehiculoId, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
 
         // Obtener el vehiculo por su ID
         Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId).
-                orElseThrow(() -> new RuntimeException("Vehículo no encontrado."));
+                orElseThrow(() -> new RuntimeException("Vehículo no encontrado con el Id Ingresado."));
 
         // Obtener las posiciones del vehículo entre las fechas indicadas
         List<Posicion> posicionesDelVehiculo = posicionRepository.findPosicionesEntreFechasPorVehiculo(fechaInicio, fechaFin, vehiculoId);
@@ -36,7 +40,6 @@ public class ReportesService {
         if (posicionesDelVehiculo.isEmpty()) {
             throw new RuntimeException("No se encontraron posiciones para el vehículo en el rango de fechas indicado.");
         }
-
 
         // Calcular la distancia recorrida (usando posicion.calcularDistancia(otraPosicion) )
         double distanciaRecorrida = 0;
@@ -64,27 +67,50 @@ public class ReportesService {
     }
 
 
-    public List<ReporteIncidentesDTO> generarReporteIncidentes (Long legajoEmp) {
+    public List<ReportePruebasDTO> generarReporteIncidentes (Long legajoEmp) {
         List <Prueba> listadoPruebas;
         if (legajoEmp == null) {
             listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrue();
         } else {
+            empleadoRepository.findById(legajoEmp).
+                    orElseThrow(() -> new RuntimeException("Empleado no encontrado con el legajo ingresado."));
             listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrueAndEmpleado_Legajo(legajoEmp);
         }
-
-        List<ReporteIncidentesDTO> listadoIncidentesDTO = new ArrayList<>();
 
         if (listadoPruebas.isEmpty()) {
             throw new RuntimeException("No se encontraron pruebas con incidentes para generar el reporte.");
         }
 
+        return generarReportePruebas(listadoPruebas);
+    }
+
+    public List<ReportePruebasDTO> generarReportePruebasPorVehiculo (Long vehiculoId) {
+        // Obtener el vehiculo por su ID
+        vehiculoRepository.findById(vehiculoId).
+                orElseThrow(() -> new RuntimeException("Vehículo no encontrado con el Id Ingresado."));
+
+        List<Prueba> listadoPruebas;
+        listadoPruebas = pruebaRepository.findByVehiculo_Id(vehiculoId);
+
+        if (listadoPruebas.isEmpty()) {
+            throw new RuntimeException("No se encontraron pruebas con incidentes para generar el reporte.");
+        }
+
+        return generarReportePruebas(listadoPruebas);
+    }
+
+
+    // Funcion para generar reporte de pruebas recibe como parametro una lista
+    private List<ReportePruebasDTO> generarReportePruebas(List<Prueba> listadoPruebas) {
+        List<ReportePruebasDTO> listadoPruebasDTO = new ArrayList<>();
+
         StringBuilder reporte = new StringBuilder();
         reporte.append("\n==============================================\n");
-        reporte.append("Reporte de Incidentes\n");
+        reporte.append("Reporte de Pruebas\n");
         reporte.append("==============================================\n");
 
         listadoPruebas.forEach(prueba -> {
-            ReporteIncidentesDTO pruebaDTO = new ReporteIncidentesDTO();
+            ReportePruebasDTO pruebaDTO = new ReportePruebasDTO();
 
             //Id
             pruebaDTO.setPruebaId(prueba.getId());
@@ -108,7 +134,7 @@ public class ReportesService {
             pruebaDTO.setNombreEmpleado(prueba.getEmpleado().getNombre());
             pruebaDTO.setApellidoEmpleado(prueba.getEmpleado().getApellido());
 
-            listadoIncidentesDTO.add(pruebaDTO);
+            listadoPruebasDTO.add(pruebaDTO);
 
             reporte.append(String.format("Prueba ID: %d\n", prueba.getId()));
 
@@ -128,13 +154,14 @@ public class ReportesService {
 
             // Fecha y hora de inicio y fin
             reporte.append(String.format("Fecha y Hora de Inicio: %s\n", prueba.getFechaHoraInicio().toString()));
-            if (prueba.getFechaHoraFin() != null){
+            if (prueba.getFechaHoraFin() != null) {
                 reporte.append(String.format("Fecha y Hora de Fin: %s\n", prueba.getFechaHoraFin().toString()));
             }
             reporte.append("\n==============================================\n");
         });
+
         System.out.printf(reporte.toString());
 
-        return listadoIncidentesDTO;
+        return listadoPruebasDTO;
     }
 }

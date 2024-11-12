@@ -1,4 +1,4 @@
-package utn.frc.backend.tutor.tp.entitities;
+package utn.frc.backend.tutor.tp.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;
