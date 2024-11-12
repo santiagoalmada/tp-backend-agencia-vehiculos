@@ -112,7 +112,6 @@ public class PosicionService {
         pruebaEnCurso.setExcedioLimite(true);
 
 
-
         // Guardar el interesado restringido en la base de datos
         interesadoRepository.save(interesado);
         pruebaRepository.save(pruebaEnCurso);

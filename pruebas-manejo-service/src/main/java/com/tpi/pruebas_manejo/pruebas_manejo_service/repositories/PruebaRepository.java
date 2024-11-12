@@ -16,6 +16,7 @@ public interface PruebaRepository extends JpaRepository<Prueba, Long> {
     List<Prueba> findByFechaHoraFinIsNull();
 
     List<Prueba> findByExcedioLimiteIsTrue();
-}
 
+    List<Prueba> findByExcedioLimiteIsTrueAndEmpleado_Legajo(Long legajo);
+}
 

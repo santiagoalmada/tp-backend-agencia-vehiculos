@@ -64,24 +64,28 @@ public class ReportesService {
     };
 
 
-    public List<ReporteIncidentesDTO> generarReporteIncidentes () {
-        List<Prueba> listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrue();
+    public List<ReporteIncidentesDTO> generarReporteIncidentes (Long legajoEmp) {
+        List <Prueba> listadoPruebas;
+        if (legajoEmp == null) {
+            listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrue();
+        } else {
+            listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrueAndEmpleado_Legajo(legajoEmp);
+        }
+
         List<ReporteIncidentesDTO> listadoIncidentesDTO = new ArrayList<>();
 
         if (listadoPruebas.isEmpty()) {
             throw new RuntimeException("No se encontraron pruebas con incidentes para generar el reporte.");
         }
 
-
         StringBuilder reporte = new StringBuilder();
         reporte.append("\n==============================================\n");
         reporte.append("Reporte de Incidentes\n");
         reporte.append("==============================================\n");
 
-
-
         listadoPruebas.forEach(prueba -> {
             ReporteIncidentesDTO pruebaDTO = new ReporteIncidentesDTO();
+
             //Id
             pruebaDTO.setPruebaId(prueba.getId());
 
@@ -128,9 +132,8 @@ public class ReportesService {
                 reporte.append(String.format("Fecha y Hora de Fin: %s\n", prueba.getFechaHoraFin().toString()));
             }
             reporte.append("\n==============================================\n");
-
-
         });
+        System.out.printf(reporte.toString());
 
         return listadoIncidentesDTO;
     }
