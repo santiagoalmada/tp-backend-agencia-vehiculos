@@ -6,7 +6,9 @@ import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.PosicionDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.*;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.InteresadoRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PosicionRepository;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PruebaRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.VehiculoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,8 @@ public class PosicionService {
     private ConfiguracionCoordenadasService ConfiguracionCoordenadasService;
     @Autowired
     private NotificacionService NotificacionService;
+    @Autowired
+    private PruebaRepository pruebaRepository;
 
 
     // actualizarPosicion
@@ -57,10 +61,11 @@ public class PosicionService {
         posicionRepository.save(nuevaPosicion);
 
         // Verificar si el vehiculo esta en alguna prueba en curso (si es asi no hacemos nada)
-        Prueba pruebaEnCurso = vehiculo.getPruebaEnCurso();
+        Prueba pruebaEnCurso = vehiculo.obtenerPruebaEnCurso();
         if (pruebaEnCurso == null) {
             return;
         }
+
 
         // Obtengo el empleado que esta realizando la prueba
         Empleado empleado = pruebaEnCurso.getEmpleado();
@@ -74,9 +79,12 @@ public class PosicionService {
             String mensajeBase = "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + "km de la Empresa. " +
                     "Posición actual: Latitud %.4f, Longitud %.4f.";
 
+            System.out.println(interesado.getNombre());
+            System.out.println(pruebaEnCurso.getComentarios());
             manejarRestriccionPorPosicion(
                     vehiculo, nuevaPosicion, empleado, interesado,
-                    mensajeBase, fechaHora);
+                    mensajeBase, fechaHora, pruebaEnCurso);
+
         }
 
         // Verificar si la posición está dentro de zonas restringidas:
@@ -85,21 +93,29 @@ public class PosicionService {
             // Crear el mensaje base para la notificación
             String mensajeBase = "El vehículo con patente %s, año %d y marca %s está dentro de una zona peligrosa. " +
                     "Posición actual: Latitud %.4f, Longitud %.4f.";
+            System.out.println(interesado.toString());
+            System.out.println(pruebaEnCurso.toString());
 
             manejarRestriccionPorPosicion(
                     vehiculo, nuevaPosicion, empleado, interesado,
-                    mensajeBase, fechaHora);
+                    mensajeBase, fechaHora, pruebaEnCurso);
         }
     }
 
     // Manejar restricciones de pruebas
     private void manejarRestriccionPorPosicion(Vehiculo vehiculo, Posicion posicion, Empleado empleado, Interesado interesado,
-                                    String mensajeBase, LocalDateTime fechaHora) {
+                                    String mensajeBase, LocalDateTime fechaHora, Prueba pruebaEnCurso) {
 
-        // Restringir al interesado
+
+        // Restringir al interesado y marcar prueba como excedida
         interesado.setRestringido(true);
+        pruebaEnCurso.setExcedioLimite(true);
+
+
+
         // Guardar el interesado restringido en la base de datos
         interesadoRepository.save(interesado);
+        pruebaRepository.save(pruebaEnCurso);
 
         // Crear el mensaje con los detalles del vehículo y posición para la notificación
         String mensaje = String.format(

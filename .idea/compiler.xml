@@ -7,9 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="tp (2) (com.example)" />
         <module name="tp" />
         <module name="pruebas-manejo-service" />
         <module name="gateway" />
+        <module name="tp (1) (utn.frc.backend.tutor)" />
       </profile>
     </annotationProcessing>
   </component>
@@ -18,6 +20,8 @@
       <module name="gateway" options="-parameters" />
       <module name="pruebas-manejo-service" options="-parameters" />
       <module name="tp" options="-parameters" />
+      <module name="tp (1) (utn.frc.backend.tutor)" options="-parameters" />
+      <module name="tp (2) (com.example)" options="-parameters" />
     </option>
   </component>
 </project>

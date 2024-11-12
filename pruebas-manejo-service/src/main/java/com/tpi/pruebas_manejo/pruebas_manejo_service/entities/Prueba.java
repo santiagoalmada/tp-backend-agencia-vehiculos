@@ -37,6 +37,9 @@ public class Prueba {
     @Column(name = "FECHA_HORA_FIN")
     private LocalDateTime fechaHoraFin;
 
+    @Column(name="excedio_limite")
+    private boolean excedioLimite;
+
     private String comentarios;
 
     public boolean estasEnCurso() {

@@ -14,6 +14,8 @@ import java.util.List;
 public interface PruebaRepository extends JpaRepository<Prueba, Long> {
     // Pruebas en curso (fechaHoraFin es null)
     List<Prueba> findByFechaHoraFinIsNull();
+
+    List<Prueba> findByExcedioLimiteIsTrue();
 }
 
 

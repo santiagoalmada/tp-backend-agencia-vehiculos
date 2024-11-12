@@ -1,5 +1,6 @@
 package com.tpi.pruebas_manejo.pruebas_manejo_service.controllers;
 
+import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteIncidentesDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteKilometrosDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.services.ReportesService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/pruebas/reportes")
@@ -34,4 +36,13 @@ public class ReportesController {
 
     }
 
+    @GetMapping("/incidentes")
+    public ResponseEntity<?> generarReporteIncidentes() {
+        try {
+            List<ReporteIncidentesDTO> reporte = reportesService.generarReporteIncidentes();
+            return ResponseEntity.ok(reporte);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error al generar el reporte: " + e.getMessage());
+        }
+    }
 }

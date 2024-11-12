@@ -8,7 +8,6 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Entity
 @Table(name = "vehiculos")
 public class Vehiculo {
@@ -46,7 +45,7 @@ public class Vehiculo {
         return false;
     }
 
-    public Prueba getPruebaEnCurso() {
+    public Prueba obtenerPruebaEnCurso() {
         // Devuelve la prueba que esta en curso
         for (Prueba prueba : pruebas) {
             if (prueba.estasEnCurso()) {
