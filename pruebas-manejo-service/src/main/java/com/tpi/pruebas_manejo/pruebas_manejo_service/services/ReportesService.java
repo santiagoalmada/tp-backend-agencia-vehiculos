@@ -61,7 +61,7 @@ public class ReportesService {
         System.out.printf(reporte.toString());
 
         return new ReporteKilometrosDTO(vehiculoId, fechaInicio.toString(), fechaFin.toString(), vehiculo.getPatente(), distanciaRecorrida);
-    };
+    }
 
 
     public List<ReporteIncidentesDTO> generarReporteIncidentes (Long legajoEmp) {
