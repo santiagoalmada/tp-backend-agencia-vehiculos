@@ -18,7 +18,7 @@ public class PosicionController {
 
     private static final String API_URL = "https://labsys.frc.utn.edu.ar/apps-disponibilizadas/backend/api/v1/configuracion/";
 
-    @PutMapping("/actualizar")
+    @PostMapping("/actualizar")
     public ResponseEntity<String> actualizarPosicion(@RequestBody PosicionDTO request) {
         try {
             PosicionService.actualizarPosicion(request);
@@ -27,4 +27,5 @@ public class PosicionController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
 }

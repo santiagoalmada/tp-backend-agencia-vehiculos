@@ -22,8 +22,9 @@ public class Vehiculo {
 
     //one to one con posicion
     @JsonIgnore // Ignorar este atributo al serializar a JSON (evitar bucle infinito)
-    @OneToOne(mappedBy = "vehiculo")
-    private Posicion posicion;
+    @OneToMany(mappedBy = "vehiculo")
+    private List<Posicion> posiciones;
+
 
     @JsonIgnore // Ignorar este atributo al serializar a JSON (evitar bucle infinito)
     @OneToMany(mappedBy = "vehiculo")
@@ -45,6 +46,16 @@ public class Vehiculo {
         return false;
     }
 
+    public Prueba getPruebaEnCurso() {
+        // Devuelve la prueba que esta en curso
+        for (Prueba prueba : pruebas) {
+            if (prueba.estasEnCurso()) {
+                return prueba;
+            }
+        }
+        return null;
+    }
+
     public Empleado getEmpleadoEnPrueba() {
         // Devuelve el empleado que esta probando el vehiculo
         for (Prueba prueba : pruebas) {
@@ -54,4 +65,5 @@ public class Vehiculo {
         }
         return null;
     }
+
 }

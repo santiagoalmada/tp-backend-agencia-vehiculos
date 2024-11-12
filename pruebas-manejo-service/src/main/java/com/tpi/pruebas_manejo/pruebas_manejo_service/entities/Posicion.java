@@ -19,7 +19,7 @@ public class Posicion {
     private Long id;
 
     // one to one con vehiculo
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "ID_VEHICULO")
     private Vehiculo vehiculo;
 
@@ -46,4 +46,13 @@ public class Posicion {
         }
         return false;
     }
+
+    //Calcular la distancia entre dos posiciones (en km) (Distancia euclidiana)
+    public double calcularDistancia(Posicion otraPosicion) {
+        double distancia = Math.sqrt(Math.pow(this.latitud - otraPosicion.getLatitud(), 2) + Math.pow(this.longitud - otraPosicion.getLongitud(), 2));
+
+        // 1 grado de latitud = 111.32 km
+        return distancia * 111.32;
+    };
+
 }

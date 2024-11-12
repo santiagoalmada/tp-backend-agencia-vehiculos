@@ -3,9 +3,8 @@ package com.tpi.pruebas_manejo.pruebas_manejo_service.services;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.ConfiguracionCoordenadasDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.NotificacionDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.PosicionDTO;
-import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Empleado;
-import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Posicion;
-import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Vehiculo;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.*;
+import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.InteresadoRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PosicionRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.VehiculoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +21,9 @@ public class PosicionService {
     @Autowired
     private PosicionRepository posicionRepository;
     @Autowired
+    private InteresadoRepository interesadoRepository;
+
+    @Autowired
     private ConfiguracionCoordenadasService ConfiguracionCoordenadasService;
     @Autowired
     private NotificacionService NotificacionService;
@@ -37,90 +39,87 @@ public class PosicionService {
 
         System.out.println("Agencia coordenada: " + configuracionDTO.getCoordenadasAgencia());
 
-        // Buscamos el vehículo:
+        // Buscamos el vehículo a la que le corresponde la posición recibida en la base de datos:
         Vehiculo vehiculo = vehiculoRepository.findById(request.getVehiculoId()).
                 orElseThrow(() -> new RuntimeException("Vehículo no encontrado."));
-
-        // Buscamos la posicion que le corresponde al vehiculo (si no existe, la creamos):
-        Posicion posicion = posicionRepository.findByVehiculoId(vehiculo.getId());
-        if (posicion == null) {
-            posicion = new Posicion();
-            posicion.setVehiculo(vehiculo);
-        }
 
         // Fecha y hora actuales
         LocalDateTime fechaHora = LocalDateTime.now();
 
-        // Actualizamos la posición del vehículo:
-        posicion.setLatitud(request.getLatitud());
-        posicion.setLongitud(request.getLongitud());
-        posicion.setFechaHora(fechaHora);
-
-        // Seteamos la posición al vehículo:
-        vehiculo.setPosicion(posicion);
+        // Creamos una nueva posición para el vehículo
+        Posicion nuevaPosicion = new Posicion();
+        nuevaPosicion.setVehiculo(vehiculo);
+        nuevaPosicion.setLatitud(request.getLatitud());
+        nuevaPosicion.setLongitud(request.getLongitud());
+        nuevaPosicion.setFechaHora(fechaHora);
 
         // Guardamos la posición en la base de datos:
-        posicionRepository.save(posicion);
+        posicionRepository.save(nuevaPosicion);
 
         // Verificar si el vehiculo esta en alguna prueba en curso (si es asi no hacemos nada)
-        if (!vehiculo.estasSiendoProbado()) {
+        Prueba pruebaEnCurso = vehiculo.getPruebaEnCurso();
+        if (pruebaEnCurso == null) {
             return;
-        };
+        }
 
         // Obtengo el empleado que esta realizando la prueba
-        Empleado empleado = vehiculo.getEmpleadoEnPrueba();
-        fechaHora = LocalDateTime.now();
+        Empleado empleado = pruebaEnCurso.getEmpleado();
+        // Obtengo el interesado que esta realizando la prueba
+        Interesado interesado = pruebaEnCurso.getInteresado();
 
-        // Verificar si la posición está dentro de limites establecidos:
-        if (!posicion.estaDentroDelRadio(configuracionDTO.getCoordenadasAgencia(),  configuracionDTO.getRadioAdmitidoKm() )) {
+        // Verificar si la posición está fuera del radio admitido:
+        if ( ! nuevaPosicion.estaDentroDelRadio(configuracionDTO.getCoordenadasAgencia(), configuracionDTO.getRadioAdmitidoKm())) {
 
-            // Mensaje
-            String mensaje = String.format(
-                    "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + "km de la Empesa. " +
-                            "Posición actual: Latitud %.4f, Longitud %.4f.",
-                    vehiculo.getPatente(),
-                    vehiculo.getAnio(),
-                    vehiculo.getModelo().getMarca().getNombre(),
-                    vehiculo.getPosicion().getLatitud(),
-                    vehiculo.getPosicion().getLongitud()
-            );
+            // Crear el mensaje base para la notificación
+            String mensajeBase = "El vehículo con patente %s, año %d y marca %s está a más de " + configuracionDTO.getRadioAdmitidoKm() + "km de la Empresa. " +
+                    "Posición actual: Latitud %.4f, Longitud %.4f.";
 
+            manejarRestriccionPorPosicion(
+                    vehiculo, nuevaPosicion, empleado, interesado,
+                    mensajeBase, fechaHora);
+        }
 
-            NotificacionDTO notificacion = new NotificacionDTO();
-            notificacion.setMensaje(mensaje);
-            notificacion.setTipo("ALERTA");
-            notificacion.setTelefono(empleado.getTelefonoContacto());
-            notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
-            notificacion.setFechaEnvio(fechaHora);
+        // Verificar si la posición está dentro de zonas restringidas:
+        if (nuevaPosicion.estaDentroDeZonas(configuracionDTO.getZonasRestringidas())) {
 
-            // Enviar notificación al otro servicio
-            NotificacionService.enviarNotificacion(notificacion);
+            // Crear el mensaje base para la notificación
+            String mensajeBase = "El vehículo con patente %s, año %d y marca %s está dentro de una zona peligrosa. " +
+                    "Posición actual: Latitud %.4f, Longitud %.4f.";
 
-        };
+            manejarRestriccionPorPosicion(
+                    vehiculo, nuevaPosicion, empleado, interesado,
+                    mensajeBase, fechaHora);
+        }
+    }
 
-        // Verificar si la posición está fuera de limites establecidos:
-        if (posicion.estaDentroDeZonas(configuracionDTO.getZonasRestringidas() )) {
+    // Manejar restricciones de pruebas
+    private void manejarRestriccionPorPosicion(Vehiculo vehiculo, Posicion posicion, Empleado empleado, Interesado interesado,
+                                    String mensajeBase, LocalDateTime fechaHora) {
 
-            // Mensaje
-            String mensaje = String.format(
-                    "El vehículo con patente %s, año %d y marca %s está dentro de una zona peligrosa. " +
-                            "Posición actual: Latitud %.4f, Longitud %.4f.",
-                    vehiculo.getPatente(),
-                    vehiculo.getAnio(),
-                    vehiculo.getModelo().getMarca().getNombre(),
-                    vehiculo.getPosicion().getLatitud(),
-                    vehiculo.getPosicion().getLongitud()
-            );
+        // Restringir al interesado
+        interesado.setRestringido(true);
+        // Guardar el interesado restringido en la base de datos
+        interesadoRepository.save(interesado);
 
-            NotificacionDTO notificacion = new NotificacionDTO();
-            notificacion.setMensaje(mensaje);
-            notificacion.setTipo("ALERTA");
-            notificacion.setTelefono(empleado.getTelefonoContacto());
-            notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
-            notificacion.setFechaEnvio(fechaHora);
+        // Crear el mensaje con los detalles del vehículo y posición para la notificación
+        String mensaje = String.format(
+                mensajeBase,
+                vehiculo.getPatente(),
+                vehiculo.getAnio(),
+                vehiculo.getModelo().getMarca().getNombre(),
+                posicion.getLatitud(),
+                posicion.getLongitud()
+        );
 
-            // Enviar notificación al otro servicio
-            NotificacionService.enviarNotificacion(notificacion);
-        };
+        // Crear la notificación que se enviará al micro-servicio de notificaciones
+        NotificacionDTO notificacion = new NotificacionDTO();
+        notificacion.setMensaje(mensaje);
+        notificacion.setTipo("ALERTA");
+        notificacion.setTelefono(empleado.getTelefonoContacto()); // teléfono del empleado
+        notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
+        notificacion.setFechaEnvio(fechaHora);
+
+        // Enviar notificación al micro-servicio de notificaciones
+        NotificacionService.enviarNotificacion(notificacion);
     }
 }
