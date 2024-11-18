@@ -31,7 +31,11 @@ public class ReportesController {
         try {
             // Validar que la fecha de inicio sea menor que la fecha de fin
             if (fechaInicio.isAfter(fechaFin)) {
-                return ResponseEntity.badRequest().body("La fecha de inicio no puede ser mayor que la fecha de fin.");
+                return ResponseEntity.badRequest().body("Error: La fecha de inicio no puede ser mayor que la fecha de fin.");
+            }
+            // Validar que la fecha de inicio no sea mayor a la fecha actual
+            if (fechaInicio.isAfter(LocalDateTime.now())) {
+                return ResponseEntity.badRequest().body("Error: La fecha de inicio no puede ser mayor a la fecha actual.");
             }
 
             ReporteKilometrosDTO reporte = reportesService.generarReporteKilometrosRecorridos(vehiculoId, fechaInicio, fechaFin);

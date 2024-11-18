@@ -13,5 +13,7 @@ import java.util.List;
 @ToString
 public class PromocionDTO {
     private String mensaje; // Mensaje de la notificación.
-    private List<String> telefonos; // Lista de teléfonos a los que se enviará la notificación.
+
+    // Lista de destinatarios a los que se le enviará la notificación, cada uno con teléfono y nombre.
+    private List<DestinatarioDTO> destinatarios;
 }

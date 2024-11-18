@@ -3,6 +3,7 @@ package utn.frc.backend.tutor.tp.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import utn.frc.backend.tutor.tp.dtos.DestinatarioDTO;
 import utn.frc.backend.tutor.tp.dtos.NotificacionDTO;
 import utn.frc.backend.tutor.tp.dtos.PromocionDTO;
 import utn.frc.backend.tutor.tp.entities.Notificacion;
@@ -23,13 +24,14 @@ public class NotificacionService {
     }
 
     public void nuevaNotificacion(NotificacionDTO notificacionDTO) {
+        LocalDateTime fechaHora = LocalDateTime.now();
 
         // Crear una nueva notificación con los datos recibidos (DTO)
         Notificacion notificacion = new Notificacion();
         notificacion.setTipo(notificacionDTO.getTipo());
         notificacion.setMensaje(notificacionDTO.getMensaje());
         notificacion.setTelefono(notificacionDTO.getTelefono());
-        notificacion.setFechaEnvio(notificacionDTO.getFechaEnvio());
+        notificacion.setFechaEnvio(fechaHora);
         notificacion.setNombreDestinatario(notificacionDTO.getNombreDestinatario());
 
         // Guardar la notificación en la base de datos
@@ -37,17 +39,20 @@ public class NotificacionService {
     }
 
     public void nuevaPromocion(PromocionDTO promocion) {
-        // Obtener la fecha y hora actuales y formatearlas
+        // Obtener la fecha y hora actuales
         LocalDateTime fechaHora = LocalDateTime.now();
 
-        // Crear una notificacion para cada telefono en la lista de telefonos
-        for (String telefono : promocion.getTelefonos()) {
+        // Crear una notificación para cada destinatario en la lista de destinatarios
+        for (DestinatarioDTO destinatario : promocion.getDestinatarios()) {
             Notificacion notificacion = new Notificacion();
             notificacion.setTipo("PROMOCION");
             notificacion.setMensaje(promocion.getMensaje());
-            notificacion.setTelefono(telefono);
+            notificacion.setTelefono(destinatario.getTelefono()); // Obtener el teléfono del destinatario
+            notificacion.setNombreDestinatario(destinatario.getNombreDestinatario()); // Obtener el nombre del destinatario
             notificacion.setFechaEnvio(fechaHora);
+
             notificacionRepository.save(notificacion);
         }
     }
+
 }

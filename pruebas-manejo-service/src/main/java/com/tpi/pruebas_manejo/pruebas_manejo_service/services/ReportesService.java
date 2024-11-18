@@ -90,7 +90,7 @@ public class ReportesService {
         List<Prueba> listadoPruebas = pruebaRepository.findByVehiculo_Id(vehiculoId);
 
         if (listadoPruebas.isEmpty()) {
-            throw new RuntimeException("No se encontraron pruebas con incidentes para generar el reporte.");
+            throw new RuntimeException("No se encontraron pruebas del vehiculo con incidentes para generar el reporte.");
         }
 
         return generarReportePruebas(listadoPruebas);
@@ -109,9 +109,9 @@ public class ReportesService {
             pruebaDTO.setPruebaId(prueba.getId());
 
             //Fecha
-            pruebaDTO.setFechaDesdeReporte(prueba.getFechaHoraInicio().toString());
+            pruebaDTO.setFechaInicioPrueba(prueba.getFechaHoraInicio().toString());
             if (prueba.getFechaHoraFin() != null) {
-                pruebaDTO.setFechaHastaReporte(prueba.getFechaHoraFin().toString());
+                pruebaDTO.setFechaFinPrueba(prueba.getFechaHoraFin().toString());
             }
 
             // Interesado
