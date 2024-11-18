@@ -2,7 +2,6 @@ package com.tpi.pruebas_manejo.pruebas_manejo_service.services;
 
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReportePruebasDTO;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.dtos.reportes.ReporteKilometrosDTO;
-import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Empleado;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Posicion;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Prueba;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.entities.Vehiculo;
@@ -28,8 +27,8 @@ public class ReportesService {
     @Autowired
     private EmpleadoRepository empleadoRepository;
 
+    // Reporte iii.
     public ReporteKilometrosDTO generarReporteKilometrosRecorridos(Long vehiculoId, LocalDateTime fechaInicio, LocalDateTime fechaFin) {
-
         // Obtener el vehiculo por su ID
         Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId).
                 orElseThrow(() -> new RuntimeException("Vehículo no encontrado con el Id Ingresado."));
@@ -49,31 +48,22 @@ public class ReportesService {
             distanciaRecorrida += posicionActual.calcularDistancia(posicionSiguiente);
         }
 
-        // Formateo del reporte
-        StringBuilder reporte = new StringBuilder();
-        reporte.append("\n===============================================\n");
-        reporte.append("Reporte de Kilómetros Recorridos\n");
-        reporte.append("===============================================\n");
-        reporte.append(String.format("Vehículo ID: %d\n", vehiculoId));
-        reporte.append(String.format("Fecha de inicio: %s\n", fechaInicio));
-        reporte.append(String.format("Fecha de fin: %s\n", fechaFin));
-        reporte.append("-----------------------------------------------\n");
-        reporte.append(String.format("Distancia total recorrida: %.2f km\n", distanciaRecorrida));
-        reporte.append("===============================================\n");
-
-        System.out.printf(reporte.toString());
-
+        // Devolver un DTO con la información necesaria
         return new ReporteKilometrosDTO(vehiculoId, fechaInicio.toString(), fechaFin.toString(), vehiculo.getPatente(), distanciaRecorrida);
     }
 
-
+    // Reporte i. y ii.
     public List<ReportePruebasDTO> generarReporteIncidentes (Long legajoEmp) {
         List <Prueba> listadoPruebas;
+        // Si no se ingresa un legajo, se buscan todas las pruebas con incidentes
         if (legajoEmp == null) {
             listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrue();
+        // Si se ingresa un legajo, se buscan las pruebas con incidentes del empleado
         } else {
+            // Validamos que el empleado ingresado exista
             empleadoRepository.findById(legajoEmp).
                     orElseThrow(() -> new RuntimeException("Empleado no encontrado con el legajo ingresado."));
+
             listadoPruebas = pruebaRepository.findByExcedioLimiteIsTrueAndEmpleado_Legajo(legajoEmp);
         }
 
@@ -84,13 +74,13 @@ public class ReportesService {
         return generarReportePruebas(listadoPruebas);
     }
 
+    // Reporte iv.
     public List<ReportePruebasDTO> generarReportePruebasPorVehiculo (Long vehiculoId) {
-        // Obtener el vehiculo por su ID
+        // Validamos que el vehiculo ingresado exista
         vehiculoRepository.findById(vehiculoId).
                 orElseThrow(() -> new RuntimeException("Vehículo no encontrado con el Id Ingresado."));
 
-        List<Prueba> listadoPruebas;
-        listadoPruebas = pruebaRepository.findByVehiculo_Id(vehiculoId);
+        List<Prueba> listadoPruebas = pruebaRepository.findByVehiculo_Id(vehiculoId);
 
         if (listadoPruebas.isEmpty()) {
             throw new RuntimeException("No se encontraron pruebas con incidentes para generar el reporte.");
@@ -100,15 +90,11 @@ public class ReportesService {
     }
 
 
-    // Funcion para generar reporte de pruebas recibe como parametro una lista
+    // Funcion para generar reporte de pruebas, recibe como parametro una lista de pruebas
     private List<ReportePruebasDTO> generarReportePruebas(List<Prueba> listadoPruebas) {
         List<ReportePruebasDTO> listadoPruebasDTO = new ArrayList<>();
 
-        StringBuilder reporte = new StringBuilder();
-        reporte.append("\n==============================================\n");
-        reporte.append("Reporte de Pruebas\n");
-        reporte.append("==============================================\n");
-
+        // Iteramos sobre la lista de pruebas y generamos un DTO por cada una
         listadoPruebas.forEach(prueba -> {
             ReportePruebasDTO pruebaDTO = new ReportePruebasDTO();
 
@@ -135,33 +121,10 @@ public class ReportesService {
             pruebaDTO.setApellidoEmpleado(prueba.getEmpleado().getApellido());
 
             listadoPruebasDTO.add(pruebaDTO);
-
-            reporte.append(String.format("Prueba ID: %d\n", prueba.getId()));
-
-            // Vehiculo
-            reporte.append(String.format("Modelo vehículo: %s\n", prueba.getVehiculo().getModelo().getDescripcion()));
-            reporte.append(String.format("Marca vehículo: %s\n", prueba.getVehiculo().getModelo().getMarca().getNombre()));
-            reporte.append(String.format("Patente vehículo: %s\n", prueba.getVehiculo().getPatente()));
-
-            // Interesado
-            reporte.append(String.format("Nombre interesado: %s\n", prueba.getInteresado().getNombre()));
-            reporte.append(String.format("Apellido interesado: %s\n", prueba.getInteresado().getApellido()));
-
-            // Empleado
-            reporte.append(String.format("Empleado: %s\n", prueba.getEmpleado().getNombre()));
-            reporte.append(String.format("Empleado: %s\n", prueba.getEmpleado().getApellido()));
-
-
-            // Fecha y hora de inicio y fin
-            reporte.append(String.format("Fecha y Hora de Inicio: %s\n", prueba.getFechaHoraInicio().toString()));
-            if (prueba.getFechaHoraFin() != null) {
-                reporte.append(String.format("Fecha y Hora de Fin: %s\n", prueba.getFechaHoraFin().toString()));
-            }
-            reporte.append("\n==============================================\n");
         });
 
-        System.out.printf(reporte.toString());
-
+        // Devolvemos la lista de DTOs
         return listadoPruebasDTO;
     }
+
 }

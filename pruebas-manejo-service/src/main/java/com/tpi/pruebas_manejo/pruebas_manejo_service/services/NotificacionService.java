@@ -26,7 +26,7 @@ public class NotificacionService {
         String url = notificacionesServiceUrl + "/nueva";
 
         try {
-            // printear el dto
+            // Imprimir la notificación a enviar
             System.out.println(notificacionDTO.toString());
 
             // Realizar el POST hacia el microservicio de Notificaciones

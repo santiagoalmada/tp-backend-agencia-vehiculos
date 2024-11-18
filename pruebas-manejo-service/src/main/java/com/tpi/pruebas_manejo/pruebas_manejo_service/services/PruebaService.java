@@ -13,7 +13,6 @@ import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.VehiculoReposi
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -42,12 +41,12 @@ public class PruebaService {
         // Validamos que el interesado no tenga la licencia vencida:
         if (interesado.tenesLicenciaVencida()) {
             throw new RuntimeException("La licencia del interesado está vencida.");
-        };
+        }
 
         // Validamos que el interesado no esté restringido para realizar pruebas:
         if (interesado.estasRestringido()) {
             throw new RuntimeException("El interesado está restringido para realizar pruebas.");
-        };
+        }
 
         // Buscamos el vehículo:
         Vehiculo vehiculo = vehiculoRepository.findById(request.getVehiculoId()).
@@ -55,8 +54,8 @@ public class PruebaService {
 
         // Validamos que el vehículo no esté siendo probado en ese mismo momento:
         if (vehiculo.estasSiendoProbado()) {
-            throw new RuntimeException("El vehículo está siendo probado en este momento.");
-        };
+            throw new RuntimeException("El vehículo ya está siendo probado en este momento.");
+        }
 
         // Buscamos el empleado:
         Empleado empleado = empleadoRepository.findById(request.getEmpleadoId()).
@@ -90,7 +89,7 @@ public class PruebaService {
 
         // Validamos que la prueba no haya finalizado:
         if (prueba.estasFinalizada()) {
-            throw new RuntimeException("La prueba ya ha finalizado.");
+            throw new RuntimeException("La prueba ingresada ya ha finalizado.");
         }
 
         // Fecha de fin (fecha y hora actuales)

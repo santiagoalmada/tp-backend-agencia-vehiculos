@@ -8,11 +8,9 @@ import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.InteresadoRepo
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PosicionRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.PruebaRepository;
 import com.tpi.pruebas_manejo.pruebas_manejo_service.repositories.VehiculoRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
 
 import java.time.LocalDateTime;
 
@@ -47,6 +45,12 @@ public class PosicionService {
         Vehiculo vehiculo = vehiculoRepository.findById(request.getVehiculoId()).
                 orElseThrow(() -> new RuntimeException("Vehículo no encontrado."));
 
+        // Verificar si el vehiculo esta en alguna prueba en curso (si es asi no se puede actualizar la posicion)
+        Prueba pruebaEnCurso = vehiculo.obtenerPruebaEnCurso();
+        if (pruebaEnCurso == null) {
+            throw new RuntimeException("El vehículo no está en ninguna prueba en curso.");
+        }
+
         // Fecha y hora actuales
         LocalDateTime fechaHora = LocalDateTime.now();
 
@@ -60,17 +64,6 @@ public class PosicionService {
         // Guardamos la posición en la base de datos:
         posicionRepository.save(nuevaPosicion);
 
-        // Verificar si el vehiculo esta en alguna prueba en curso (si es asi no hacemos nada)
-        Prueba pruebaEnCurso = vehiculo.obtenerPruebaEnCurso();
-        if (pruebaEnCurso == null) {
-            return;
-        }
-
-        // Obtengo el empleado que esta realizando la prueba
-        Empleado empleado = pruebaEnCurso.getEmpleado();
-        // Obtengo el interesado que esta realizando la prueba
-        Interesado interesado = pruebaEnCurso.getInteresado();
-
         // Verificar si la posición está fuera del radio admitido:
         if ( ! nuevaPosicion.estaDentroDelRadio(configuracionDTO.getCoordenadasAgencia(), configuracionDTO.getRadioAdmitidoKm())) {
 
@@ -79,7 +72,7 @@ public class PosicionService {
                     "Posición actual: Latitud %.4f, Longitud %.4f.";
 
             manejarRestriccionPorPosicion(
-                    vehiculo, nuevaPosicion, empleado, interesado,
+                    vehiculo, nuevaPosicion,
                     mensajeBase, fechaHora, pruebaEnCurso);
 
         }
@@ -92,18 +85,23 @@ public class PosicionService {
                     "Posición actual: Latitud %.4f, Longitud %.4f.";
 
             manejarRestriccionPorPosicion(
-                    vehiculo, nuevaPosicion, empleado, interesado,
+                    vehiculo, nuevaPosicion,
                     mensajeBase, fechaHora, pruebaEnCurso);
         }
     }
 
     // Manejar restricciones de pruebas
-    private void manejarRestriccionPorPosicion(Vehiculo vehiculo, Posicion posicion, Empleado empleado, Interesado interesado,
+    private void manejarRestriccionPorPosicion(Vehiculo vehiculo, Posicion posicion,
                                     String mensajeBase, LocalDateTime fechaHora, Prueba pruebaEnCurso) {
+
+        // Obtengo el empleado y al interado que esta realizando la prueba
+        Empleado empleado = pruebaEnCurso.getEmpleado();
+        Interesado interesado = pruebaEnCurso.getInteresado();
 
         // Restringir al interesado y marcar prueba como excedida
         interesado.setRestringido(true);
         pruebaEnCurso.setExcedioLimite(true);
+
         // Actualizar en la base de datos
         interesadoRepository.save(interesado);
         pruebaRepository.save(pruebaEnCurso);
@@ -122,7 +120,7 @@ public class PosicionService {
         NotificacionDTO notificacion = new NotificacionDTO();
         notificacion.setMensaje(mensaje);
         notificacion.setTipo("ALERTA");
-        notificacion.setTelefono(empleado.getTelefonoContacto()); // teléfono del empleado
+        notificacion.setTelefono(empleado.getTelefonoContacto());
         notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
         notificacion.setFechaEnvio(fechaHora);
 

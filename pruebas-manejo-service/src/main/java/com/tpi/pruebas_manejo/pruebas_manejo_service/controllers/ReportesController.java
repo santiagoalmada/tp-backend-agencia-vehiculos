@@ -28,8 +28,14 @@ public class ReportesController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fechaFin) {
 
         try {
+            // Validar que la fecha de inicio sea menor que la fecha de fin
+            if (fechaInicio.isAfter(fechaFin)) {
+                return ResponseEntity.badRequest().body("La fecha de inicio no puede ser mayor que la fecha de fin.");
+            }
+
             ReporteKilometrosDTO reporte = reportesService.generarReporteKilometrosRecorridos(vehiculoId, fechaInicio, fechaFin);
             return ResponseEntity.ok(reporte);
+
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error al generar el reporte: " + e.getMessage());
         }
