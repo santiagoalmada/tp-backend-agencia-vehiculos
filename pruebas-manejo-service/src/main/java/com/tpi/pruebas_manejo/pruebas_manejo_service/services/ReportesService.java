@@ -49,7 +49,14 @@ public class ReportesService {
         }
 
         // Devolver un DTO con la información necesaria
-        return new ReporteKilometrosDTO(vehiculoId, fechaInicio.toString(), fechaFin.toString(), vehiculo.getPatente(), distanciaRecorrida);
+        return new ReporteKilometrosDTO(
+                vehiculoId,
+                fechaInicio.toString(),
+                fechaFin.toString(),
+                vehiculo.getPatente(),
+                vehiculo.getModelo().getDescripcion(),
+                vehiculo.getModelo().getMarca().getNombre(),
+                distanciaRecorrida);
     }
 
     // Reporte i. y ii.
@@ -102,9 +109,9 @@ public class ReportesService {
             pruebaDTO.setPruebaId(prueba.getId());
 
             //Fecha
-            pruebaDTO.setFechaInicio(prueba.getFechaHoraInicio().toString());
+            pruebaDTO.setFechaDesdeReporte(prueba.getFechaHoraInicio().toString());
             if (prueba.getFechaHoraFin() != null) {
-                pruebaDTO.setFechaFin(prueba.getFechaHoraFin().toString());
+                pruebaDTO.setFechaHastaReporte(prueba.getFechaHoraFin().toString());
             }
 
             // Interesado

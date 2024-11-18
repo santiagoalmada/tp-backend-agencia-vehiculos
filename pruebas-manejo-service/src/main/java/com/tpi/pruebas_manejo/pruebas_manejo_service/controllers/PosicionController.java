@@ -18,6 +18,11 @@ public class PosicionController {
 
     private static final String API_URL = "https://labsys.frc.utn.edu.ar/apps-disponibilizadas/backend/api/v1/configuracion/";
 
+    // Endpoint N4: Crear una nueva posicion para un vehiculo:
+    // Se recibe
+    // - idVehiculo
+    // - latitud
+    // - longitud
     @PostMapping("/actualizar")
     public ResponseEntity<String> actualizarPosicion(@RequestBody PosicionDTO request) {
         try {

@@ -16,28 +16,13 @@ import java.util.List;
 public class PruebaController {
     @Autowired
     private PruebaService pruebaService;
+
+
     // Endpoint N1: Crear nueva prueba:
-
-    // Metodo: POST
-    // Path: /pruebas/nueva
-
-    // Se recibe:
-    // DTO con los datos de la prueba a crear:
-    // - interesadoId: ID del interesado (cliente)
+    // Se recibe (json):
+    // - interesadoId: ID del interesado
     // - vehiculoId: ID del vehículo
-    // - empleadoId: ID del empleado que realiza la prueba
-
-    // Validaciones:
-    //  - El interesado no debe tener la licencia vencida.
-    //  - El interesado no debe estar restringido para realizar pruebas.
-    //  - El vehículo no debe estar siendo probado en ese mismo momento.
-
-    // Pasos:
-    // - Crear una nueva prueba con los datos recibidos (DTO).
-    // - Asignar el Vehículo y el Interesado a la prueba.
-    // - Realizar las validaciones de antes.
-    // - Guardar la prueba en la base de datos.
-
+    // - empleadoId: ID del empleado
     @PostMapping("/nueva")
     public ResponseEntity<String> crearPrueba(@RequestBody CrearPruebaRequestDTO request) {
         try {
@@ -48,21 +33,19 @@ public class PruebaController {
         }
     }
 
+
     // Endpoint N2: Listar Pruebas en curso:
-    // Metodo: GET
-    // Path: /pruebas/en-curso
     @GetMapping("/en-curso")
     public List<Prueba> getPruebasEnCurso() {
         return pruebaService.getPruebasEnCurso();
     }
 
+
+
     // Endpoint N3: Finalizar prueba:
-    // Metodo: POST
-    // Path: /pruebas/finalizar
-    // Se recibe:
+    // Se recibe (json):
     // - pruebaId: ID de la prueba a finalizar
     // - Comentarios
-
     @PutMapping("/finalizar")
     public ResponseEntity<String> finalizarPrueba(@RequestBody FinalizarPruebaRequestDTO request) {
         try {

@@ -1,51 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="agencia40.db" uuid="251f0471-a064-4f7e-ad5e-ed68a738444d">
+    <data-source source="LOCAL" name="agencia.db" uuid="1afc80b2-3f8b-472b-b44b-250dcfc6ceff">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/pruebas-manejo-service/src/main/resources/agencia40.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\Archivos MIOS\Facultad\Tercer-año\BDA - Backend de Aplicaciones\Trabajo Practico\tp-backend-agencia-vehiculos\pruebas-manejo-service\src\main\resources\agencia.db</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
       </jdbc-additional-properties>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="notificaciones10" uuid="1236b23b-faea-4e7e-a32d-965b8ed11a15">
+    <data-source source="LOCAL" name="notificaciones.db" uuid="95b0bcd8-f1eb-461d-9dd5-3b4e1190db19">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\tomas\IdeaProjects\tp-backend-agencia-vehiculos\notificaciones-service\src\main\resources\notificaciones10.db</jdbc-url>
-      <jdbc-additional-properties>
-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
-      </jdbc-additional-properties>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="agencia30" uuid="097c474e-d85f-4271-a791-debda178824c">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\tomas\IdeaProjects\tp-backend-agencia-vehiculos\pruebas-manejo-service\src\main\resources\agencia30.db</jdbc-url>
-      <jdbc-additional-properties>
-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
-      </jdbc-additional-properties>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="agencia40.db [2]" uuid="a4f480db-9339-44cb-a9e0-aabe2d0fea79">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\tomas\IdeaProjects\tp-backend-agencia-vehiculos\pruebas-manejo-service\src\main\resources\agencia40.db</jdbc-url>
-      <jdbc-additional-properties>
-        <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
-      </jdbc-additional-properties>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
-    <data-source source="LOCAL" name="notificaciones10.db" uuid="f215cce2-fa47-4d82-90cf-51a0cd1caf3c">
-      <driver-ref>sqlite.xerial</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:D:\Archivos MIOS\Facultad\Tercer-año\BDA - Backend de Aplicaciones\Trabajo Practico\tpi\tp-backend-agencia-vehiculos\notificaciones-service\src\main\resources\notificaciones10.db</jdbc-url>
+      <jdbc-url>jdbc:sqlite:D:\Archivos MIOS\Facultad\Tercer-año\BDA - Backend de Aplicaciones\Trabajo Practico\tp-backend-agencia-vehiculos\notificaciones-service\src\main\resources\notificaciones.db</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />
       </jdbc-additional-properties>

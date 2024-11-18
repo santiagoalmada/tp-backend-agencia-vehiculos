@@ -10,16 +10,20 @@ import lombok.Setter;
 
 public class ReporteKilometrosDTO {
     private Long vehiculoId;
-    private String fechaInicio;
-    private String fechaFin;
-    // Atributos veheiculo
+    private String fechaDesdeReporte;
+    private String fechaHastaReporte;
+    // Atributos vehiculo
+    private String marcaVehiculo;
+    private String modeloVehiculo;
     private String patente;
     private double kmRecorridos;
 
-    public ReporteKilometrosDTO(Long vehiculoId, String fechaInicio, String fechaFin, String patente, double kmRecorridos) {
+    public ReporteKilometrosDTO(Long vehiculoId, String fechaDesdeReporte, String fechaHastaReporte, String marcaVehiculo, String modeloVehiculo, String patente, double kmRecorridos) {
         this.vehiculoId = vehiculoId;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
+        this.fechaDesdeReporte = fechaDesdeReporte;
+        this.fechaHastaReporte = fechaHastaReporte;
+        this.marcaVehiculo = marcaVehiculo;
+        this.modeloVehiculo = modeloVehiculo;
         this.patente = patente;
         this.kmRecorridos = kmRecorridos;
     }

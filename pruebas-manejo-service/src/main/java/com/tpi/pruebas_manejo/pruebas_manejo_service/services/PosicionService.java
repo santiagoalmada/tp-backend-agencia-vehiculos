@@ -121,7 +121,7 @@ public class PosicionService {
         notificacion.setMensaje(mensaje);
         notificacion.setTipo("ALERTA");
         notificacion.setTelefono(empleado.getTelefonoContacto());
-        notificacion.setNombreInteresado(empleado.getNombre() + " " + empleado.getApellido());
+        notificacion.setNombreDestinatario(empleado.getNombre() + " " + empleado.getApellido());
         notificacion.setFechaEnvio(fechaHora);
 
         // Enviar notificación al micro-servicio de notificaciones

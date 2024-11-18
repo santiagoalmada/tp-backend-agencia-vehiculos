@@ -9,20 +9,20 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ReportePruebasDTO {
     private Long pruebaId;
-    private String fechaInicio;
-    private String fechaFin;
-    private String modeloVehiculo;
-    private String marcaVehiculo;
+    private String fechaDesdeReporte;
+    private String fechaHastaReporte;
     private String patente;
+    private String marcaVehiculo;
+    private String modeloVehiculo;
     private String nombreInteresado;
     private String apellidoInteresado;
     private String nombreEmpleado;
     private String apellidoEmpleado;
 
-    public ReportePruebasDTO(Long pruebaId, String fechaInicio, String fechaFin, String modeloVehiculo, String marcaVehiculo, String patente, String nombreInteresado, String apellidoInteresado, String nombreEmpleado, String apellidoEmpleado) {
+    public ReportePruebasDTO(Long pruebaId, String fechaDesdeReporte, String fechaHastaReporte, String modeloVehiculo, String marcaVehiculo, String patente, String nombreInteresado, String apellidoInteresado, String nombreEmpleado, String apellidoEmpleado) {
         this.pruebaId = pruebaId;
-        this.fechaInicio = fechaInicio;
-        this.fechaFin = fechaFin;
+        this.fechaDesdeReporte = fechaDesdeReporte;
+        this.fechaHastaReporte = fechaHastaReporte;
         this.modeloVehiculo = modeloVehiculo;
         this.marcaVehiculo = marcaVehiculo;
         this.patente = patente;

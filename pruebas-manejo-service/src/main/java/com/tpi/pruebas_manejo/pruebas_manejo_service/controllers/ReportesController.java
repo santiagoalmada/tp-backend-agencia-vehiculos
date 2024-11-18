@@ -21,6 +21,7 @@ public class ReportesController {
     @Autowired
     private ReportesService reportesService;
 
+    // Endpoint N6 - Reporte iii.
     @GetMapping("/kilometros")
     public ResponseEntity<?> generarReporteKilometraje(
             @RequestParam Long vehiculoId,
@@ -42,6 +43,7 @@ public class ReportesController {
 
     }
 
+    // Endpoint N6 - Reporte i. y ii.
     @GetMapping("/incidentes")
     public ResponseEntity<?> generarReporteIncidentes(
             @RequestParam(value = "legajoEmp", required = false) Long legajoEmp) {
@@ -53,6 +55,7 @@ public class ReportesController {
         }
     }
 
+    // Endpoint N6 - Reporte iv.
     @GetMapping("/pruebas-vehiculo")
     public ResponseEntity<?> generarReportePruebasPorVehiculo(
             @RequestParam Long vehiculoId) {

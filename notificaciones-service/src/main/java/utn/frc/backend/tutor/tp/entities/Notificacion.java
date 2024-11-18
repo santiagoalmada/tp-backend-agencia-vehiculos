@@ -23,14 +23,13 @@ public class Notificacion {
     private String mensaje;
 
     @Column(name="tipo")
-    private String tipo;
-    // Promocion -- Notificacion de area
+    private String tipo; // Alerta, Promocion
 
     @Column(name="telefono")
     private String telefono;
 
-    @Column(name="nombre_interesado")
-    private String nombreInteresado;
+    @Column(name="nombre_destinatario")
+    private String nombreDestinatario;
 
     @Column(name="fecha_envio")
     private LocalDateTime fechaEnvio;
