@@ -36,11 +36,6 @@ public class PosicionService {
 
     public void actualizarPosicion( PosicionDTO request ){
 
-        // Obtenemos la configuración de coordenadas:
-        ConfiguracionCoordenadasDTO configuracionDTO = ConfiguracionCoordenadasService.obtenerConfiguracion();
-
-        System.out.println("Agencia coordenada: " + configuracionDTO.getCoordenadasAgencia());
-
         // Buscamos el vehículo a la que le corresponde la posición recibida en la base de datos:
         Vehiculo vehiculo = vehiculoRepository.findById(request.getVehiculoId()).
                 orElseThrow(() -> new RuntimeException("Vehículo no encontrado."));
@@ -50,6 +45,11 @@ public class PosicionService {
         if (pruebaEnCurso == null) {
             throw new RuntimeException("El vehículo no está en ninguna prueba en curso.");
         }
+
+        // Obtenemos la configuración de coordenadas:
+        ConfiguracionCoordenadasDTO configuracionDTO = ConfiguracionCoordenadasService.obtenerConfiguracion();
+
+        System.out.println("Agencia coordenada: " + configuracionDTO.getCoordenadasAgencia());
 
         // Fecha y hora actuales
         LocalDateTime fechaHora = LocalDateTime.now();
