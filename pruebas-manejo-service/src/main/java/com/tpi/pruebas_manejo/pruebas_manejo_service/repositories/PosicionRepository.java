@@ -20,6 +20,6 @@ public interface PosicionRepository extends JpaRepository<Posicion, Long> {
 
     List<Posicion> findPosicionesEntreFechasPorVehiculo(
             @Param("fechaInicio") LocalDateTime fechaInicio,
-            @Param("fechaHastaReporte") LocalDateTime fechaFin,
+            @Param("fechaFin") LocalDateTime fechaFin,
             @Param("vehiculoId") Long vehiculoId);
 }

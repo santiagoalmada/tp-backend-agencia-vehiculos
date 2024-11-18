@@ -30,7 +30,7 @@ public class NotificacionService {
         notificacion.setMensaje(notificacionDTO.getMensaje());
         notificacion.setTelefono(notificacionDTO.getTelefono());
         notificacion.setFechaEnvio(notificacionDTO.getFechaEnvio());
-        notificacion.setNombreInteresado(notificacionDTO.getNombreInteresado());
+        notificacion.setNombreDestinatario(notificacionDTO.getNombreDestinatario());
 
         // Guardar la notificación en la base de datos
         notificacionRepository.save(notificacion);
