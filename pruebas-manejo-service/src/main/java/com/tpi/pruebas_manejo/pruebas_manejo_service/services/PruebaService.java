@@ -89,7 +89,7 @@ public class PruebaService {
 
         // Validamos que la prueba no haya finalizado:
         if (prueba.estasFinalizada()) {
-            throw new RuntimeException("La prueba ingresada ya ha finalizado.");
+            throw new RuntimeException("La prueba ingresada ya habia sido finalizada.");
         }
 
         // Fecha de fin (fecha y hora actuales)

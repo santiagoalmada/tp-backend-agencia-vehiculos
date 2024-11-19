@@ -53,9 +53,9 @@ public class ReportesService {
                 vehiculoId,
                 fechaInicio.toString(),
                 fechaFin.toString(),
-                vehiculo.getPatente(),
-                vehiculo.getModelo().getDescripcion(),
                 vehiculo.getModelo().getMarca().getNombre(),
+                vehiculo.getModelo().getDescripcion(),
+                vehiculo.getPatente(),
                 distanciaRecorrida);
     }
 
@@ -90,7 +90,7 @@ public class ReportesService {
         List<Prueba> listadoPruebas = pruebaRepository.findByVehiculo_Id(vehiculoId);
 
         if (listadoPruebas.isEmpty()) {
-            throw new RuntimeException("No se encontraron pruebas del vehiculo con incidentes para generar el reporte.");
+            throw new RuntimeException("No se encontraron pruebas del vehiculo para generar el reporte.");
         }
 
         return generarReportePruebas(listadoPruebas);
