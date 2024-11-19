@@ -26,6 +26,12 @@ public class PosicionController {
     @PostMapping("/actualizar")
     public ResponseEntity<String> actualizarPosicion(@RequestBody PosicionDTO request) {
         try {
+            // Validación de latitud y longitud en rangos permitidos
+            if (request.getLatitud() < -90 || request.getLatitud() > 90 ||
+                    request.getLongitud() < -180 || request.getLongitud() > 180) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Latitud o longitud fuera de los límites permitidos.");
+            }
+
             PosicionService.actualizarPosicion(request);
             return ResponseEntity.ok("Posicion recibida.");
         } catch (Exception e) {

@@ -54,15 +54,4 @@ public class Vehiculo {
         }
         return null;
     }
-
-    public Empleado getEmpleadoEnPrueba() {
-        // Devuelve el empleado que esta probando el vehiculo
-        for (Prueba prueba : pruebas) {
-            if (prueba.estasEnCurso()) {
-                return prueba.getEmpleado();
-            }
-        }
-        return null;
-    }
-
 }

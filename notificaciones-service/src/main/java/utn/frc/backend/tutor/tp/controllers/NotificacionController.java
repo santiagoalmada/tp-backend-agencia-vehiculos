@@ -38,6 +38,15 @@ public class NotificacionController {
     @PostMapping("/nueva-promocion")
     public ResponseEntity<String> nuevaPromocion(@RequestBody PromocionDTO promocion) {
         try {
+            // Verificar que el mensaje de la promoción no sea nulo o vacío
+            if (promocion.getMensaje() == null || promocion.getMensaje().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("El mensaje de la promoción no puede ser nulo o vacío.");
+            }
+            // Verificar que la lista de destinatarios no sea nula o vacía
+            if (promocion.getDestinatarios() == null || promocion.getDestinatarios().isEmpty()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La lista de destinatarios no puede ser nula o vacía.");
+            }
+
             notificacionService.nuevaPromocion(promocion);
             return ResponseEntity.ok("Promoción creada exitosamente.");
         } catch (Exception e) {

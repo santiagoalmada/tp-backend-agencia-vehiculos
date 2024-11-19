@@ -29,30 +29,47 @@ public class Posicion {
     private Double latitud;
     private Double longitud;
 
+    // Constante de conversión de grados a kilómetros
+    private static final double KILOMETROS_POR_GRADO = 111.32;
+
     // Verificar si la posicion esta dentro del radio
     public boolean estaDentroDelRadio(Coordenada coordenadasCentro, double radio) {
-        // Distancia euclidiana (pitagoras)
-        double distancia = Math.sqrt(Math.pow(this.latitud - coordenadasCentro.getLat(), 2) + Math.pow(this.longitud - coordenadasCentro.getLon(), 2));
+        // Diferencia de latitud y longitud
+        double diferenciaLatitud = this.latitud - coordenadasCentro.getLat();
+        double diferenciaLongitud = this.longitud - coordenadasCentro.getLon();
+
+        // Aplicar la fórmula de distancia euclidiana (pitagoras)
+        double distancia = Math.sqrt(Math.pow(diferenciaLatitud * KILOMETROS_POR_GRADO, 2) +
+                Math.pow(diferenciaLongitud * KILOMETROS_POR_GRADO, 2));
+
+        // Verificar si la distancia está dentro del radio
+        System.out.println("Distancia desde el centro a la posicion: " + distancia);
         return distancia <= radio;
     }
 
-    // Verificar si la posicion esta dentro de algunas zonas
+    // Verificar si la posición está dentro de alguna de las zonas recibidas
     public boolean estaDentroDeZonas(List<Zona> zonas) {
         for (Zona zona : zonas) {
-            if (this.latitud >= zona.getNoroeste().getLat() && this.latitud <= zona.getSureste().getLat() &&
-                    this.longitud >= zona.getNoroeste().getLon() && this.longitud <= zona.getSureste().getLon()) {
+            // Verificar si la latitud está dentro del rango de la zona
+            boolean latitudDentro = this.latitud <= zona.getNoroeste().getLat() && this.latitud >= zona.getSureste().getLat();
+
+            // Verificar si la longitud está dentro del rango de la zona
+            boolean longitudDentro = this.longitud >= zona.getNoroeste().getLon() && this.longitud <= zona.getSureste().getLon();
+
+            // Si ambas condiciones son verdaderas, la posición está dentro de la zona
+            if (latitudDentro && longitudDentro) {
+                System.out.println("La posición está dentro de una zona.");
                 return true;
             }
         }
         return false;
     }
 
-    //Calcular la distancia entre dos posiciones (en km) (Distancia euclidiana)
+    // Calcular la distancia entre dos posiciones (en km) (distancia euclidiana)
     public double calcularDistancia(Posicion otraPosicion) {
         double distancia = Math.sqrt(Math.pow(this.latitud - otraPosicion.getLatitud(), 2) + Math.pow(this.longitud - otraPosicion.getLongitud(), 2));
 
-        // 1 grado de latitud = 111.32 km
-        return distancia * 111.32;
+        return distancia * KILOMETROS_POR_GRADO;
     };
 
 }

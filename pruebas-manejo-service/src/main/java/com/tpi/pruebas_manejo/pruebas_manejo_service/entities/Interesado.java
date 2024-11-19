@@ -41,9 +41,5 @@ public class Interesado {
     public boolean tenesLicenciaVencida() {
         return fechaVencimientoLicencia.isBefore(LocalDateTime.now());
     }
-
-    public boolean estasRestringido() {
-        return restringido;
-    }
 }
 

@@ -29,9 +29,9 @@ public class NotificacionService {
     private String clientId;
     @Value("${keycloak.client.secret}")
     private String clientSecret;
-    @Value("${keycloak.username}") // Usuario Empleado (por ejemplo, g001-B)
+    @Value("${keycloak.username-empleado}") // Usuario Empleado (por ejemplo, g001-B)
     private String keycloakUsername;
-    @Value("${keycloak.password}") // Password del Empleado
+    @Value("${keycloak.password-empleado}") // Password del Empleado
     private String keycloakPassword;
 
 
@@ -51,7 +51,7 @@ public class NotificacionService {
                 + "&username=" + keycloakUsername
                 + "&password=" + keycloakPassword;
 
-        // Crear el HTTPEntity, uniéndo el header y el cuerpo
+        // Crear el HTTPEntity que se enviara a keycloak, uniéndo el header y el cuerpo
         HttpEntity<String> tokenRequest = new HttpEntity<>(body, headers);
 
         try {
@@ -75,13 +75,14 @@ public class NotificacionService {
                     return accessToken;
                 }
             }
-            throw new RuntimeException("Error al obtener el token de acceso para poder enviar la notificacion al microservicio de Notificaciones: Token keycloack no encontrado");
+            throw new RuntimeException("Token keycloack no encontrado");
 
 
         } catch (Exception e) {
-            throw new RuntimeException("Error inesperado al obtener el token de acceso para poder enviar la notificacion al microservicio de Notificaciones:: " + e.getMessage(), e);
+            throw new RuntimeException("Error inesperado al obtener el token de acceso para poder enviar la notificacion al microservicio de Notificaciones: " + e.getMessage(), e);
         }
     }
+
 
     public void enviarNotificacion(NotificacionDTO notificacionDTO) {
         // Definir la URL del endpoint en el microservicio de Notificaciones

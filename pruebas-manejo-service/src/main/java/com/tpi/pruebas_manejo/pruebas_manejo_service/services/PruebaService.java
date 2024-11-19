@@ -44,7 +44,7 @@ public class PruebaService {
         }
 
         // Validamos que el interesado no esté restringido para realizar pruebas:
-        if (interesado.estasRestringido()) {
+        if (interesado.isRestringido()) {
             throw new RuntimeException("El interesado está restringido para realizar pruebas.");
         }
 
