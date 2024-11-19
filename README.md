@@ -7,7 +7,7 @@ La aplicación sigue una arquitectura de microservicios que incluye dos microser
 1. **Microservicio de Pruebas de Manejo**: Maneja las operaciones relacionadas con las pruebas de manejo de vehículos. Este microservicio contiene los endpoints necesarios para crear, finalizar, y consultar las pruebas, así como para actualizar las posiciones de los vehículos durante las pruebas, y poder generar reportes sobre las mismas.
 2. **Microservicio de Notificaciones**: Permite enviar notificaciones a destinatarios sobre alertas ocurridas durante las pruebas de manejo (como posiciones fuera de la distancía máxima permitida por la agencia, o dentro de zonas restringidas), así como el envío de promociones a varios destinatarios en simultaneo. 
 
-![Arquitectura de la aplicación](https://github.com/user-attachments/assets/cfdf4913-03a8-489b-82b4-3574e3d404c1)
+![arquitectura-tpi](https://github.com/user-attachments/assets/db036102-b52f-49b3-92fa-6d51f55f5e35)
 
 ---
 
